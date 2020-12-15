@@ -17,8 +17,21 @@ var authRes = {
 AuthRouter.route('/student/login')
     .post((req, res) => {
         //USN should be in CAPS
-        const usn = req.body.usn;
-        Student.findOne({usn:usn}).then((student)=>{
+
+        var bearerHeader =req.headers['authorization'];
+
+        if(typeof bearerHeader != 'undefined'){
+            const bearerToken = bearerHeader.split(' ')[1];
+            //verify token sent by user
+            jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET, (err, data)=>{
+                if(err){res.sendStatus(403)}
+                else{
+                    res.redirect('/dashboard');
+                }
+            })
+        }else{
+            const usn = req.body.usn;
+            Student.findOne({usn:usn}).then((student)=>{
             if(!student){
                 res.setHeader('Content-Type', 'application/json');
 
@@ -35,7 +48,7 @@ AuthRouter.route('/student/login')
             else{
                 res.setHeader('Content-Type', 'application/json');
                 
-                authRes.accessToken = createToken({student});
+                authRes.accessToken = createToken({usn : student.usn});
                 authRes.message="Login Successful";
                 authRes.authStatus=true;
                 authRes.user={
@@ -57,7 +70,8 @@ AuthRouter.route('/student/login')
         .catch((err)=>{
             res.send(err);
         })
-    })
+    }   
+})
 
 AuthRouter.route('/student/register')
     .post(async (req, res) => {
