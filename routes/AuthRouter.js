@@ -14,22 +14,30 @@ var authRes = {
     user:{}
 }
 
+//The bearer token should be stored in local-storage(preffered) or cookie at frontend to be sent with every request
 AuthRouter.route('/student/login')
     .post((req, res) => {
-        //USN should be in CAPS
 
         var bearerHeader =req.headers['authorization'];
 
         if(typeof bearerHeader != 'undefined'){
-            const bearerToken = bearerHeader.split(' ')[1];
+
+            const bearerToken = bearerHeader.split(' ')[1]; //get token
+            
             //verify token sent by user
             jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET, (err, data)=>{
-                if(err){res.sendStatus(403)}
+                if(err){
+                    
+                }
                 else{
                     res.redirect('/dashboard');
                 }
             })
         }else{
+
+            //if no authorised token then manaul login
+
+            //USN should be in CAPS
             const usn = req.body.usn;
             Student.findOne({usn:usn}).then((student)=>{
             if(!student){
