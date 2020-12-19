@@ -9,25 +9,12 @@ var createToken = (user) => {
 }
 
 var authRes = {
-    authStatus: false,
-    message: '',
-    accessToken: null,
-    user: {}
-}
-
-function validation(res, req) {;
-
-}
-
-
-
-
-
-
-
-
-
-//The bearer token should be stored in local-storage(preffered) or cookie at frontend to be sent with every request
+        authStatus: false,
+        message: '',
+        accessToken: null,
+        user: {}
+    }
+    //The bearer token should be stored in local-storage(preffered) or cookie at frontend to be sent with every request
 AuthRouter.route('/student/login')
     .post((req, res) => {
 
