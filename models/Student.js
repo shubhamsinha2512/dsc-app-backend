@@ -5,7 +5,8 @@ const subjectSmallDetails = require('./partials/subjectSmallDetails');
 const StudentSchema = new Schema({
     usn:{
         type:String,
-        required:[true, "usn not specified"]
+        required:[true, "usn not specified"],
+        unique:true
     },
     name:{
         first:{ type:String, required:[true, 'first name not specified'] },
@@ -31,10 +32,10 @@ const StudentSchema = new Schema({
         type:Number,
         required:[false, "mobile no. not specified"]
     },
-    subjects:[subjectSmallDetails]
+    subjects:[]
 
 },{
     timestamps:true
 });
 
-module.exports = mongoose.model("Studnet", StudentSchema);
+module.exports = mongoose.model("Student", StudentSchema);
